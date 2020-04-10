@@ -1,0 +1,122 @@
+Derivadas parciales
+----------------------
+z = f(x,y)
+dz/dx  o  dz/dy   pero con delta en vez de d.
+fx(z)  o  fy(z)   pero con delta en vez de d.
+
+Recordatorio: Reglas de derivadas
+1)
+d(k)/dx = 0
+
+2)
+d(x^n)/dx = nx^(n-1)
+
+3)
+d(cu)/dx = c du/dx	donde u(x)
+
+4)
+d(u+v)/dx = du/dx + dv/dx	donde u(x) y v(x)
+
+5)
+d(uv)/dx = vdu/dx + udv/dx	donde u(x) y v(x)
+
+6)
+d(sin(x))/dx = cos(x)
+d(cos(x))/dx = -sin(x)
+d(tan(x))/dx = sec2(x)
+d(sec(x))/dx = sec(x)tan(x)
+d(arctan(x))/dx = -arcsec2(x)
+d(arcsec(x))/dx = -arcsec(x)arctan(x)
+
+7) Cadena
+Diferencial:
+dy = fx(x)dx
+basandose en la ecuaion de Plano tangente
+dz = fx(x,y)dx + fy(x,y)dy
+
+Tomando del diferencial y dividiendolo por otro diferencial
+dy/dt = fx(x)dx/dt = dy/dx  *  dx/dt	donde x(t) y(x)
+dz/dt = fx(x,y)dx/dt + fy(x,y)dy/dt		donde z(x,y) x(t) y(t)
+
+La derivada en un punto particular(a,b):
+fx(a,b)
+fy(a,b)
+
+Nota: Hay derivadas de cualquier orden
+Nota: fxy(a,b) = fyx(a,b)
+
+Plano tangente a un punto
+--------------------------
+z = fx(x0, y0)(x - x0) + fy(x0, y0)(y - y0) + z0	para todo p(x0,y0) y z(x,y)
+
+Pero para hacerlo mas generico se puede suponer w(x,y,z) = 0	// Solo se paso la z al otro lado de la equacion
+Luego aplicar regla de la cadena y llegar a una equacion mas generica
+
+dw/dt = fx(x,y,z)dx/dt + fy(x,y)dy/dt + fz(x,y,z)dz/dt = 0
+y aplicando la logica del plano tangente
+
+fx(x0, y0, z0)(x - x0) + fy(x0, y0, z0)(y - y0) + fz(x0, y0, z0)(z - z0) = 0	para todo p(x0,y0,z0) y w(x,y,z) = k 
+
+Derivacion implicita
+--------------------------
+dz/dt = fx(x,y)dx/dt + fy(x,y)dy/dt = 0		donde z(x,y) x(t) y(t)
+fy(x,y)dy/dt = -fx(x,y)dx/dt
+dy/dt = -fx(x,y)/fy(x,y) dx/dt
+
+_
+v : gradiente
+	  ->
+base: b = 	[i]
+			[j]
+_						->
+v z(x,y) =	[ dz/dx ] * b 
+			[ dz/dy ]
+			
+En un punto, en que direccion nos tenemos que mover para dirigirnos a la mayor crecimiento.
+ _
+|V| : que tan rapido esta creciendo
+
+
+Maximo y minimo
+--------------------------
+fx(a,b) = 0 y fy(a,b) = 0
+
+Recordemos que con la segunda deribada se sabe si es maximo o minimo, si la segunda derivada 
+positiba es minimo y viceversa.
+
+
+Multiplicador de Legrende
+--------------------------
+Si tenemos un sistema f(x,y,z) restringido por otro sistema g(x,y,z) = k.
+Para determiar al maximo o minimo al que se quiere llegar bajo esa restriccion.
+_				   _
+Vf(x,y,z) = (labda)Vg(x,y,z)
+
+
+-------------Ejemplos---------------
+z=3x + y^2
+dz/dx = 3
+dz/dy = 2y
+
+p(1,2)
+z=7
+fx(a,b) = 3
+fy(a,b) = 4
+_
+v z(x,y) = 	[ dz/dx ] =	[3]
+			[ dz/dy ] 	[4]
+			  
+ _
+|v| = 5
+
+z = (x+1)^2  /2 + (y-2)^2  /4
+
+dz/dx = (x+1)
+dz/dy = (y-2)  /2
+
+d= 0.2
+
+p	|	z	|	-dz/dx	|	-dz/dy	|
+3,5		41/4	-4			-3/2
+
+-2.782

@@ -1,0 +1,483 @@
+Support vector machines
+----------------------------
+bases:
+1) vector w de pesos como vector perpendicular a la linea que separa dos clasificaciones
+
+la linea tiene una f
+f: Ax1 + Bx2 + b = 0
+w = [A]
+    [B]                              ->  ->
+la funcion tambien puede verse como: w * x + b = 0
+
+Vamos a encontrar dos puntos dentro de la recta y formar un vector con ambos.
+
+-Bx2 = Ax1 + b
+-Ax1 = Bx2 + b
+
+x2 =  -A/B x1 - b/B         x1 = -B/A x2 - b/A
+
+f1 = (0, -b/B)
+f2 = (-b/A, 0)
+->
+f = [b/A]
+    [-b/B]
+->  ->  
+f * w  = Ab/A - Bb/B = b - b = 0    w Y LA FUNCION SIEMPRE SERAN PERPENDICULARES
+----------------------------
+2) La distacia entre un punto y una recta y su relacion con b. https://www.youtube.com/watch?v=P740MiWj2GU
+Se conoce que:
+
+d = |f|/ sqr(A^2 + B^2) = |Ax1 + Bx2 + b|/ sqr(A^2 + B^2)
+pero |w| = sqr(A^2 + B^2)
+por lo tanto:
+     ->  ->
+d = |w * x + b|/|w|
+TODO QUEDA EN RELACION DE w Y SU RELACION CON b.
+
+----------------------------
+3) Si dividimos los puntos en los que estan de un lado y del otro de la recta, los que estan en la direccion
+de w seran distancias positivas y los que estan en direccion contraia seran distanias negativas
+De:
+     ->  ->
+d = |w * x + b|/|w|
+                     ->
+la unica variable es x y son las componentes del punto a evaluar.
+Si x esta en direccion de w entonces el producto punto sera positivo, de otra manera sera negativo.
+Pero no solo eso solo es necesario que w * x > -b para que la distancia ya sea positiva.
+w * x = -b seran los puntos sobre la recta ya que d = 0.
+Cualquier otro punto w * x < -b esta del otro lado de la recta y como se ve w * x es negativo y lo que nos dice
+que x esta en direccion contraria de w.
+En coclusion 
+si w * x + b > 0 x esta en la casificacion en direccion de w(+).
+si w * x + b = 0 x esta en la recta.
+si w * x + b < 0 x esta en la casificacion en direccion contraria de w(-).
+
+----------------------------
+4) Lagrange
+Yaser Abu-Mostafa(Caltech)
+
+f(x,y)
+Maximo o minimo
+fx = 0
+fy = 0
+
+restrinccion g(x,y) = k
+
+Para encontrar el maximo dado por la restriccion g entonces se usan los
+multiplicadores de lagrange.
+
+lambda: multipicador de lagrange
+_           _
+Vg = lambda*Vf
+
+ejemplo:
+f(x,y) = x^2 + 2y^2
+g(x,y)= x^2 +y^2 = 1
+
+_           
+Vf =    [2x]
+        [4y]
+_        
+Vg =    [2x]
+        [2y]
+        
+1)2x = lambda 2x
+2)2y = lambda 4y
+3)x^2 +y^2 = 1
+
+Posibilidades:
+1)
+lambda = 1 entonces y solo puede ser 0
+x^2 = 1 entonces x = +-1
+1.1) (1,0)
+1.2) (-1,0)
+
+2)
+x = 0 entonces  lambda = 1/2
+y^2 = 1
+2.1) (0,1)
+2.2) (0,-1)
+
+1.1) (1,0)
+f(x,y) = x^2 + 2y^2 = 1
+MINIMO
+
+1.2) (-1,0)
+f(x,y) = x^2 + 2y^2 = 1
+MINIMO
+
+2.1) (0,1)
+f(x,y) = x^2 + 2y^2 = 2
+MAXIMO
+
+2.2) (0,-1)
+f(x,y) = x^2 + 2y^2 = 2
+MAXIMO
+
+Nota: cuando hay mas restricciones todas se multiplican por un factor y se suman
+_          _         _
+Vf = (alfa)Vg + (miu)Vh
+----------------------------
+----------------------------
+SUPPORT VECTOR MACHINES
+----------------------------
+
+Una vez que se tiene bien clasifiado dos grupos el objetivo sera optimizar esta clasificacion.
+El perceptron ya hace una clasificacion, pero lo que se busca es que la linea que dividio los dos grupos
+sea mas clara o tenga el mayor espacio entre los puntos que tiene mas cercanos tanto el positivo como
+el negativo.
+
+    x2
+    ^
+    |        ->
+    \        >w(perpendicular a s)    
+    |\s     /   +
+    | \  + /
+    |  \  /    +
+    |   \/
+ -  |  - \
+    |     \  
+    -------\--------------------->x1
+
+Entonces se parte de que ya estamos con los puntos clasificados.                        ->
+Del perceptron se tiene que ya tenemos el set de entrenamiento que estara dividido en X|y
+donde yi solo puede ser -1 o +1.
+Se necesitan hacer 2 cosas para poder computar los puntos mas cercanos a la recta y la distancia que generan.
+
+1) NORMALIZAR PARA QUE D NO DEPENDA DE |W|
+Si yo tengo:
+la linea tiene una f
+f: Ax1 + Bx2 + b = 0
+w = [A]
+    [B] 
+Pero divido toda la funcio entre |w| no afectara la recta.
+f: A/|w(vieja)| x1 + B/|w(vieja)| x2 + b/|w(vieja)| = 0
+w(nueva) = [A/|w(vieja)|]
+            [B/|w(vieja)|] 
+por lo tanto |w(nueva)|  = 1
+
+Si ahora trabajamos esto con estos nuevos valores entonces(Nota ahora w(nueva) sera simplemente w):
+     ->  ->
+d = |w * x + b|/|w| = |w * x + b|/1 = |w * x + b|
+
+Para resolver el problema del valor absoluto, nosotras ya sabemos que w * x + b dara positivo del lado en direcicon de w
+pero tambien sabemos que yi sera +1 para esos puntos.
+Asi mismo, w * x + b dara negativo del lado contrario de la direcicon de w pero tambien sabemos que yi sera -1 para esos puntos.
+por lo que:
+d = yi(w * xi + b)
+Simpre sera positivo, de esta manera resolvemos el problema del valor absoluto.
+
+2) Encontrar el punto mas cercano a la recta
+Se tiene que  d = yi(w * xi + b) entonces:
+dmin = min(yi(w * xi + b))
+
+Conclusion: Con un poco de imaginacion se podra ver que  si solo desplazamos la recta la mejor solucion es si movemos la linea 
+justo a la mitad del punto - y el punto + mas cercanos.
+
+----------------------------
+Encontrar relacion entre w y la maxima separacion que se puede tener entre los puntos mas cercanos
+----------------------------
+
+    x2
+    ^
+    |        ->
+    \        >w(perpendicular a s)    
+    |\s     /   +
+    | \  + /
+    |  \  /    +                  
+    |   \/
+ -  |  - \
+    |     \  
+    -------\--------------------->x1
+    
+            |
+            |
+            |
+            V  
+    x3
+    ^        /
+    |       /\         
+    |      /  >w
+    |     /\1  
+ -  |  - /  +  + +
+------1\/------------>x1,x2
+       /
+    
+MUY IMPORTANTE:
+Entonces vamos a plantear nuestro problema, lo que queremos es generar un plano que divida x+ y x- y que la distancia entre su punto x+ mas
+cercano y el punto plano sea 1 asi mismo queremos que entre x- y el plano sea 1.
+
+Una a distancia 1 del lado opuesto de la direccion de w
+h-: w * xi + b = -1
+Otra a distancia 1 del lado de la direccion de w 
+h+: w * xi + b = 1
+
+Todos los puntos - estaran mas alla de la distancia h-.
+Todos los puntos + estaran mas alla de la distancia h+.
+
+La distancia de los puntos es d = yi(w * xi + b) pero como todas son igual o mayor a 1 entonces d = yi(w * xi + b) >= 1.
+^   ->                          ->   ^
+w = w/|w|   w: normalizado      k = mw      k: es paralelo a w normalizado.
+
+Vamos a definir 3, primero dos vectores que esta cada uno sobre h+ y h- respectivamente:
+->      ->
+x+  y   x-                ->   ->   ->
+Y por ultimo la relacion: x+ = x- + k
+El vector k atravieza perpendicularmente el area que separa los puntos, es por esto que el objetivio es que k
+sea lo mas grande posible, en otras palabras que m sea lo mas grande posible.
+
+w*x- + b = -1       w*x- = -1 - b
+w*x+ + b = 1
+w*(x- + k) + b = 1
+         ^
+w*(x- + mw) + b = 1
+w*(x- + mw/|w|) + b = 1
+w*x- + mw*w/|w| + b = 1
+w*x- + m|w|^2/|w| + b = 1
+w*x- + m|w| + b = 1
+-1 - b + m|w| + b = 1
+m|w| = 2
+m = 2/|w|
+
+Como vemos mientras |w| sea mas pequeño mayor sera m que es el objetivo pero tenemos las restricciones de las distancias de los puntos
+y trabajaremos |w|^2 por simplicidad.
+
+Entonces el problema a resolver es
+
+Minimo de 1/2|w|^2
+Con las restricciones:
+yi(w * xi + b) >= 1  ó   (yi(w * xi + b)) - 1 >= 0
+
+----------------------------
+Aplicamos lagrange para resolver
+
+f(w,b) = 1/2 |w|^2
+gi(w,b) = (yi(w * xi + b)) - 1
+_               _
+Vf(w,b) = sum(aiVgi(w,b))
+_
+Vf(w,b) =   [w]
+            [0]
+_
+Vg(w,b) =   [sum(aiyixi)]
+            [sum(aiyi)]
+            
+w = sum(aiyixi)     y   0 = sum(aiyi)
+
+Otra forma de ver la optimizacion desde antes de aplicar el determinante es:
+Vamos a intentar resolver primero quitando a w de la formula para esto restamos las sumas de aigi(w,b) a f(w,b). Nota: |w|^2 = w*w
+
+1/2(w*w) - sumi(ai(yi(w * xi + b) - 1))
+1/2 sumi(aiyixi)*sumj(ajyjxj) - sumi(ai(yi(sumj(ajyjxj)*xi + b) - 1))
+1/2 sumi(sumj(aiyiajyj(xi*xj))) - sumi(aiyi(sumj(ajyjxj)*xi + b)) + sumi(ai)
+1/2 sumi(sumj(aiyiajyj(xi*xj))) - sumi(aiyi(sumj(ajyjxj*xi) + b)) + sumi(ai)
+1/2 sumi(sumj(aiyiajyj(xi*xj))) - sumi(aiyisumj(ajyjxj*xi)) - bsumi(aiyi) + sumi(ai)
+1/2 sumi(sumj(aiyiajyj(xi*xj))) - sumi(sumj(aiyiajyjxj*xi)) - bsumi(aiyi) + sumi(ai)
+sumi(ai) - 1/2 sumi(sumj(aiyiajyj(xi*xj)))
+
+Finalmente para encontrar las ai se necesita resolver:
+
+Maximo valor de ai en la funcion
+sumi(ai) - 1/2 sumi(sumj(aiyiajyj(xi*xj)))
+Restricciones
+0 = sum(aiyi)
+Como vemos tenemos la funcion a optimizar junto con las restricciones que nos dio la optimizacion con lagrange pero ya no dependemos
+de w.
+
+Juntemos nuestras formulas nuevamente para obtener a esto ya lo puede hacer python con cvxopt:
+Maximizar a : 
+    1) - 1/2 sumi(sumj(aiyiajyj(xi*xj))) + sumi(ai) 
+Restricciones:
+    2) yi(w * xi + b) >= 1
+    3) 0 = sum(aiyi)
+    4) ai >= 0             // esto ya esta dado por lagrange
+    5) w = sum(aiyixi)
+    6) ai[yi(w * xi + b) -1] = 0
+    Esta ultima no se de donde salio pero lo que entiendo es que nos interesa encontrar las a justo cuando la distancia(yi(w * xi + b))
+    es igual a 1 en teoria seran uno para x+ y otro para x- pero realmente no es tan relevante. 
+
+Computando esto se obtendran las ai y con esto pues ya se sabe que:
+w = sum(aiyixi)
+
+Y como se planteo desde un principio se busca la b justo cuando la distancia entre los puntos mas cercanos es igual a 1.
+yi(w * xi + b) = 1
+yiyi(w * xi + b) = yi // pero yiyi = 1
+b = yi - (w * xi)
+Normalmente se toma el promedio de los dos puntos x- y x+ mas cercanos.
+
+b = 1/2 [(yi - (w * x+mas cercano)) + (yi - (w * x-mas cercano))]
+
+Resolviendo a con cvxopt
+-------------------------------------
+cvxopt ya tine la posibilidad de resolver el siguente patron
+
+minimize(a):
+1/2(atPa)  + qta
+Con la restrinccion:
+Ga <= h
+Aa = b
+
+Pero tambien tenermos que multiplicar todos nuestras formulas por -1 y asi nuestro sistema se combierte en:
+Minimizar a : 
+    1)  1/2 sumi(sumj(aiyiajyj(xi*xj))) + -sumi(ai) 
+Restricciones:
+    3) 0 = sum(aiyi)
+    4) -ai <= 0 
+
+Aterrizandolo a nuestro problema
+qt = [-1 -1 -1 ...-1]
+P = yiyj(xi*xj)
+h = 0
+G = [1 1 1 ...1]
+A = yit
+b = 0
+-------------------------------------
+Suavizar los margenes
+-------------------------------------
+Como se planteo en el problema anterior, solo aplica si como minimo hay 2 espacios de diferencia entre el 
+punto -x y +x mas cercanos.
+
+Pero podemos hacer que este valor sea un poco mas pequeño y distinto para cada punto, incluso que pase al 
+otro lado de la linea y volver a evaluar.
+yi(w * xi + b) >= 1 - zetai
+
+Por las razones mensionadas zetai >= 0.
+
+El problema original era:
+Minimo de 1/2|w|^2
+Con las restricciones:
+yi(w * xi + b) >= 1
+
+Pero agregando zeta y considerando que se debe minimazar tambien esta zeta.
+Minimo de 1/2|w|^2 + c*sum(zetai)
+Con las restricciones:
+yi(w * xi + b) >= 1 - zetai
+zetai >= 0
+
+Siguiendo las operaiciones anteriores llegaremos a:
+
+Maximizar a : 
+    1) - 1/2 sumi(sumj(aiyiajyj(xi*xj))) + sumi(ai) 
+Restricciones:
+    3) 0 = sum(aiyi)
+    4) c >= ai >= 0             // esto ya esta dado por lagrange
+    
+Y entonces
+
+Minimizar a : 
+    1) 1/2 sumi(sumj(aiyiajyj(xi*xj))) - sumi(ai) 
+Restricciones:
+    3) 0 = sum(aiyi)
+    4) c >= ai >= 0
+
+Basicamente si C es muy grande es como no tener suabizado el SVM y a medida que lo reducimos es mas suave incluso es posible
+que algunos puntos pasen del otro lado de la linea.
+
+-------------------------------------
+Kernels
+-------------------------------------
+Primero tenemos que dejar en claro que el ejemplo anterior se trabajo en dos dimensiones pero aplica en las dimensiones que sean.
+La forma de funcionar de los kerneles es agregando otra dimension y el escalar para la otra dimesion dependera de los escalares
+de las dimensiones que si ya se tenian originalmente. Ejemplo:
+            x2
+       +    ^      +
+  +         |
+         -  |  -    +
+--------------------------->x1
+          - | -
+    +       |       +
+    
+En este caso no se pueden separar por una linea los puntos, pero que tal si agregamos una dimension x3 y que su escalar al cuadrado
+sea el valor absoluto del punto.
+entonces tendremos algo asi como:
+        phi(x1,x2)
+(x1,x2) -----------> x1,x2,(x1^2, x2^2)
+
+            x3
+       +    ^      +
+  +         |
+         +  |     +
+            |
+          - |- 
+       -    |-
+--------------------------->x1,x2
+
+En este nuevo sistema si seran separables asi que cualquier punto nuevo lo podemos trasladar a este nueveo sistema y trabajarlo
+ahi o asi tambien podriamos encontrar la linea en el nuevo sistema y luego aplicarle la operacion inversa del escalar de la 
+dimension agragada y asi encontrar la linea en el sistema viejo.
+
+Aqui se puede encontrar una lista de las funciones mas comunes: https://scikit-learn.org/stable/data_transforms.html
+
+Como sabemos lo que se busca es 
+Maximizar a : 
+    1) - 1/2 sumi(sumj(aiyiajyj(xi*xj))) + sumi(ai) 
+
+Maximizar a : 
+    1) - 1/2 sumi(sumj(aiyiajyj(phi(xi)*phi(xj)))) + sumi(ai) 
+    
+Entonces tendriamos que transformar xi y xj cada vez, y esto significa mucho procesamiento.
+
+Por suerte esta demostrado que phi(xi)*phi(xj) -> K(xi*xj).
+A esta K se le conoce como kernel.
+Entonces:
+Maximizar a : 
+    1) - 1/2 sumi(sumj(aiyiajyj(K(xi*xj)))) + sumi(ai) 
+    
+Algunos kerneles muy comunes son: 
+K(xi*xj) = (xi*xj + c)^d        // como para linea curba de separacion
+K(xi*xj) = exp(-y|xi*xj|^2)     // como para linea circular
+
+Realmente si debe haber una realacion entre phi y el kernel, pero la verdad es que no nos importa, mejor trabajamos directo con
+el Kernel viendo las propiedades de este.
+
+
+-------------------------------------
+Algoritmo SMO
+-------------------------------------
+El problema a resolver hasta ahora quedo como
+Minimizar a : 
+    1) 1/2 sumi(sumj(aiyiajyjK(xi*xj))) - sumi(ai) 
+Restricciones:
+    3) 0 = sum(aiyi)
+    4) c >= ai >= 0
+
+Todo lo que se vio hasta ahorita involutra calculos matriciales y por lo general involucra bastante memoria. SMO es un algoritmo
+que tambien resuelve este problema de manera menos eficiente pero con menos uso de memoria.
+
+El objetivo es empezar con los multiplicadores a en 0 y modificarlos sin romper las restricciones hasta alcanzar el 1) mas pequeño.
+Entonces la idea del algoritmo sera:
+a1) Empezamos con ai = 0
+a2) Tomamos un ai con etiqueta y = 1 y otro con y = -1
+a3) Los movemos desde 0 hasta C simultaneamente esto nos asegura 3) y 2)
+a4) Por cada paso evaluamos 1) para quedarnos con los valores que dieron el valor minimo en 1).
+a5) Una vez encontrados en esos puntos, continuemos con otro par.
+
+Esa es la idea principal, pero realmente se usa una heuristica para determinar sus valores.
+
+Consideremos Ei = f(xi) - yi
+
+Como vimos, se toman dos ai(a1 y a2)
+entonces la heristica usada sera:
+
+*   a2(nuevo) = a2(viejo) + (E1 - E2)
+y para mantener 3)
+*   a1(nuevo) = a1(viejo) + y1y2(a2(viejo) - a2(nuevo))
+Recordando no romper 4)
+
+
+-------------------------------------
+Multiclase SVM
+-------------------------------------
+Hasta ahora lo que hemos visto es para 2 clases, pero lo miso se puede hacer si tenemos mas clases. lo unico que tenemos que hacer
+es manupular yi.
+si y = {1,2,3,4}
+Entonces 
+para encontrar la linea divisoria para y=1, convertimos y=2,3,4 en y=2  y aplicamos SVM.
+Lugo
+para encontrar la linea divisoria para y=2, convertimos y=1,3,4 en y=1  y aplicamos SVM.
+luego
+para encontrar la linea divisoria para y=3, convertimos y=1,2,4 en y=1  y aplicamos SVM.
+finalmente
+para encontrar la linea divisoria para y=4, convertimos y=1,2,3 en y=1  y aplicamos SVM.
+
+Esto nos daran la recta que divide cada clase, las areas que queden en comun deberan ser ignoradas.

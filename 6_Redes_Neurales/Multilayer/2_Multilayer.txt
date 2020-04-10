@@ -1,0 +1,96 @@
+Varias Neuronas
+------------------------------
+Recapitulando:
+La verdadera respuesta es llevar el vectro de pesos de direccion de una clasificacion a otra NO IMPORTA EL NUMERO DE DIMENSIONES.
+Por eso cuando hay un error se suma/resta el valor mismo del punto evaluado.
+
+gradiente
+
+recordando que el gradiente es:
+_
+Vf(x,y) =   [df/dx]
+            [df/dy]
+
+Basicamente el gradiente nos indica que la direccion que nos debemos mover para dirigirnos a el maximo de la funcion.
+Asi mismo, si nos movemos -[df/dx] en i entonces nos estaremos moviendo en direccion contraria al valor maximo.
+
+------------------------------
+
+Varias entradas
+z: salida
+d: deseado
+error = z-d: es la diferencia
+
+s = w0 + sum(wnxn)
+
+e(p) = e = 1/2  (z-d)^2
+
+gama tendra la misma 
+^: delta
+Nos queremos mover en direccion contraria al lo que nos de el maximo error con respecto a los cambios en pesos: - gama de/dWn
+Wn(p+1) =	Wn(p) + ^Wn(p)	=	Wn - gama de/dWn	=	Wn - gama de/dz dz/ds ds/dWn	=	Wn = Wn - gama(z-d)*dz/ds*Xn
+
+z-d: delta rule
+
+----------------------------------------------
+N enradas
+J neuronas en capa 1
+K neuronas en capa 2
+y son las salidas de la primera capa
+z son las salidas de la segunda capa
+s el estado de la primera capa
+t el estado de la segunda capa
+
+formulas:
+
+1)  sj = sum(WnjXn) + W01j
+2)  tk = sum(WjkYj) + W02k
+3)  yj = f(sj)
+4)  zk = g(tk)
+5)  ek = 1/2  (zk -dk)^2
+6)  Wij = Wij - gama de/dWij
+
+aprendizaje 
+Backpropagation
+
+Capa 2
+^Wjk = - gama de/dWjk       // 6)
+^Wjk = - gama de/dz  dz/dtk  dtk/dWjk  // recordemos que estamos deribando contra 
+                                          un solo W por lo que los demas son constantes. 
+^Wjk = - gama (zk -dk)*g'(tk)*Yj
+
+7)  lambdak = de/dz  dz/dtk = dek/dtk = (zk -dk)*g'(tk)
+
+Capa 1
+En la capa 2 el ek que producia Wjk solo era sobre una salida zk, pero en el caso de Wnj 
+el error que inducen es sobre todas las zk entonces
+^Wnj = - alfa sumk(dek/dWnj)       // 6)
+^Wnj = - alfa sumk(dek/dy  dyj/dsj  dsj/dWnj)  
+^Wnj = - alfa sumk(dek/dy)  dyj/dsj  dsj/dWnj // algunas deribadas no son iteradas sobre k y salen.
+^Wnj = - alfa sumk(dek/dy)  f'(sj)*xn
+^Wnj = - alfa sumk(dek/dtk dtk/dy)  f'(sj)*xn
+^Wnj = - alfa sumk(lambdak dtk/dy)  f'(sj)*xn   // 7)
+^Wnj = - alfa sumk(lambdak Wjk)  f'(sj)*xn   // recordemos que estamos deribando contra 
+                                          un solo Y por lo que los demas son constantes.
+                                          
+
+Hay funciones de activaion especialmente faciles de trabajar:
+por ejempo:
+
+Sigmoid(x) = 1 / 1+exp(-x)
+luego
+
+d(Sigmoid(x))/dx = sigmoid(x) (1 - sigmoid(x))
+-------------------------------------------------------
+Codigo
+Para pasar todo esto a codigo es mas facil verlo de modo de matrices.
+
+gamma y alfa seran los learning rates lr
+
+^Wjk = - gama (zk -dk)*g'(tk)*Yj
+^Wjk = - lr*y*((z-d)*g'(t))T
+
+lambdak = (zk -dk)*g'(tk)
+^Wnj = - lr sumk(lambdak Wjk)  f'(sj)*xn
+^Wnj = - lr sumk((zk -dk)*g'(tk)*Wjk)  f'(sj)*xn
+^Wnj = - lr*xn*((Wjk*(z-d)*g'(t))*f'(s))T

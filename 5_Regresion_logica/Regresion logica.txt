@@ -1,0 +1,104 @@
+Regresion logistica
+--------------------------
+First we need to analyze the Bernulli distribution
+(y^r)((1-y)^(1-r))  where r = 1,0
+r is the result that we can get y is a probability then that distribution we can see easily that 
+if we have r=1 we get the probability to get r=1
+if we have r=0 we get the probability to get r=0
+--------------------------------------------------------------
+Probabilistic model or sigmoid
+
+A probabilistic function is a function that goes from 0 to 1 (0% to 100%).
+The function is also called sigmoid.
+f(x) = sigmoid(x) = 1 / (1+e^-z)
+were z = sum(WiXi)
+were W0 is always 1 and X are the inputs to the model.
+--------------------------------------------------------------
+Sigmoid derivation
+f(x) = sigmoid(x) = 1 / (1+e^-x)
+df/dx = e^-x / (1+e^-x)^2
+
+(1-sigmoid(x)) = e^-x / (1+e^-x)
+(1-sigmoid(x))*sigmoid(x) = e^-x / (1+e^-x)^2
+
+d(sigmoid(x))/dx = (1-sigmoid(x))*sigmoid(x)
+
+==================================================================================
+Cultural Part
+
+Oods
+odds : Relationship between the probability that something happen against it doesn't.
+Odds = P/(1 - P)
+
+Odds ratio: Relationship between 2 Odds.
+Odds ratio =  Odds1/Odds0 = P1/(1 - P1)  /  P0/(1 - P0)
+
+Take in consideration that we are evaluating the same event but in different conditions
+otherwise it doesn't has any sense.
+
+example: 2 coins one is fair other not 
+Odds(Head0) = 0.5/0.5 = 1
+Odds(Head1) = 0.8/0.2 = 4
+
+Odds ratio = 4 / 1 = 4
+That means that there is 4 more chances to get a Head with the not fair coin.
+-----------------------------------------
+Note1: Considering not a binary input variable, then the odds ratio means how much 
+increase/decrease the odds if the variable increase by 1.
+This is something that we want to get.
+-----------------------------------------
+Odds ratio of no having changes in odds will be 1 Odds0/odds0 = 1, and we will allso notice
+that the Odds ratio increase exponentially.
+Odds ratio depends on P and everything in will be constant excepting  e^b1x, then we will see
+Odds ratio(deltas) = e^(b1*delta)
+
+Note1 shall match with the result of delta = 1.
+-----------------------------------------
+Note2:
+logit(P) = ln(P/1-P)  // log of the odds
+
+1-P = 1- (1 / (1+e^-z)) = (1+e^-z-1)/ (1+e^-z) = e^-z / (1+e^-z)
+P/1-P = (1 / (1+e^-z)) / (e^-z / (1+e^-z)) = e^z were z = sum(WiXi)
+
+logit(P) = ln(P/1-P) = ln(e^z) = z = sum(WiXi)  // Just like linear regression
+==================================================================================
+As in linear regression we are going to propose a function to describe the system, then train it
+and then test how does it work.
+
+In this case because we are going to address problems related with probabilities we are going to
+propose that the system match a probability model.
+
+f(x) = P = sigmoid(x) = 1 / (1+e^-z) were z = sum(WiXi)
+
+In this case we are going to check if some inputs x have a possibility to be class C1, we only have
+C1 and C2 then:
+1 - P(C1|x) = P(C2|x).
+
+The P that we are trying to find is P(C1|x) = y
+
+y = P(C1|x) = sigmoid(W*X + W0) = sigmoid(W*X) // we just need to add bias to X
+
+Now lets process our like-hood analogically to our error function. In this case following the Bernulli distribution, 
+the goal is that
+if we have a r=1 the probability to have r=1 shall be 1.
+and
+if we have a r=0 the probability to have r=0 shall be ALSO 1.
+Then what we expect is to check all the samples and obtain with this distribution the biggest possible number.
+l = muli((yi^ri)((1-yi)^(1-ri)))
+
+In this case we are going to use the error as:
+E = -log(l)
+Because we see that as much as l increments E shall decrease and because we are working everything in exponentials
+using the log is a good option.
+E = -(sumi(ri*log(yi) + (1-ri)*log(1-yi)))
+
+Now we just need to apply negative gradient strategy many times until the error doesn't have any significant change. 
+
+^W = -a dE/DWj = -a sumi( ri/yi - (yi(1-yi))(-xj) +  -(1-ri)/(1-yi)(yi(1-yi)(-xj)) )   // sigmoid derivation
+= a*sumi((ri/yi - (1-ri)/(1-yi))*(yi-(1-yi))(-xj)) = (ri-yi)xj
+
+Then basically we take all the samples X, we multiply them for the factor ri-yi and we add to W, and we will stop when the
+error is not significantly changing or at the last iteration.
+
+
+ 

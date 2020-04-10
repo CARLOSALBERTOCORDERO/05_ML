@@ -1,0 +1,68 @@
+Redes bayesianas
+-------------------
+
+Ejemplo y explicacion
+A: Años de experiencia: {1,2,3}
+B: Calificacion: {A,B,C,D}
+c: PhD: {s,n}
+D: Entrevista: {s,n}
+E: Contratacion: {s,n}
+
+Nodos base: A, B
+
+B----------->C
+|
+-------------|
+			 v
+A----------->D------->E
+
+Nota: las flechas marcan dependencia
+Nota: Las redes bayesianas son un problema NP, por lo que si se tienen mas de 10 nodos ya se vuelve
+		muy complejo. Pero hay tecnicas de simplificacion.
+
+Se analiza la Distribucion de Probabilidad Conjunta a buscar:
+El espacio muestral va a ser de 96 elementos en este caso:
+3*4*2*2*2 = 96
+P(A=2, B= A, C=s, D=n, E=n) = 1/96
+Se necesita la de todos los casos.
+
+Pero normalmete se busca encontrar una probabilidad dependiendo de una evidencia.
+La evidencia es algo que se sabe que ya paso.
+E(B=C, D=s)
+Con esto se reduce la Distribucion de Probabilidad Conjunta a solo 3 variables. 3*2*2 = 12.
+Y de ahi se analizan casos como P(C=s)
+
+Aplicando bayes
+P(A,B,C,D,E) = P(A)P(B|A)P(C|AC)P(D|ABC)P(E|ABCD)
+
+Pero fijandonos en el modelo hay varios nodos que son independientes
+P(A,B,C,D,E) = P(A)P(B)P(C|B)P(D|AB)P(E|D)
+
+Para hacer los calculos se trazan trayectorias:
+Ejemplo trayectorias de A a C: ADBC
+Se puede ir por las flechas o opuesto.
+Estan Deconectados.
+
+La evidencia separa el grafo y Nodos que eran dependientes se pueden hacer independientes y vicebersa.
+Tipos de conecion:
+lineal
+A->B->C
+Divergente
+B->C
+|>A
+Convergente
+A->B
+ C|^
+
+La trayectoria A a C se puede desconectar si hay una evidenia en la trayectoria. 
+E(B=A) haria A y C deseparados.
+B----------->C
+A----------->D------->E
+
+Si tengo nodo convergente en la trayectoria. En el ejemplo D es convergente.
+Por lo tanto no hay coneccion entre A y B solo: DB
+
+Pero si evidencia esta en convergente, entonces no se rompe el nodo por convergencia. P(D=s)
+
+Con esto se separa el grafo y ya solo se trabaja con el grafo que contine lo que se quiere trabajar.
+

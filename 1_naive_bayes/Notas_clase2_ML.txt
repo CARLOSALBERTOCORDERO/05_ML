@@ -1,0 +1,111 @@
+Probabilidad
+
+Los fenomenos naturales pueden ser aleatorios y se pueden analizar con probabilidad.
+Todas las posibles saidas de un experimento se llaman espacio muestral y cada salida
+es un evento.
+
+tipos me machine learning:
+No supervisado
+Reforzado
+Supervisado
+
+Usan:
+Clasificaion
+Regresion
+
+Claisfiacion:
+vector(observacion) de descriptores(atributos) es igual a un numero finito de  salidas  entonces estamos clasificando.
+
+Regresion:
+vector(observacion) de descriptores(atributos) es igual a un intervalo de valores entonces es regresion.
+
+Teorema de Bayes:
+P(A|B) = P(A)P(B|A)/P(B) = P(AB)/P(B)
+
+Se usa para cuando sabemos P(B|A) ahora saber la relacion P(A|B)
+
+
+https://machinelearningmastery.com/naive-bayes-classifier-scratch-python/
+
+{ : Sumatoria
+
+Bayes formula and Naive Bayes formula
+-------------------------------------
+Bayes with only one input one output
+-----------------		n				  n			  n
+|	F1	|	F2	|	E = U(EFi)		P(E)= {P(EFi)  =  {[P(E|Fi)P(Fi)]
+|	|---|---|	|		n=1				  n=1		 n=1
+|	|	|	|	|
+|-------E-------|
+|	|	|	|	|										 					n
+|	|---|---|	|	P(Fj|E) = P(FjE)/P(E) =	P(E|Fj)P(j)/P(E)  = P(E|Fj)P(j)/ {[P(E|Fi)P(Fi)]
+|	F3	|	F4	|															n=1
+-----------------															   n
+					P(E|Fj) = P(FjE)/P(Fj) = P(Fj|E)P(E)/P(Fj)  = P(Fj|E)P(E)/ {[P(Fj|Ei)P(Ei)]
+																			  n=1
+																			
+but if we have more inputs then
+
+->
+i  = [x1,x2,x3...,xn]
+	->		->			->
+P(o| i) = P(i|o)P(o) / P(i)	 = P(x1^x2^x3...^xn|P(o)) P(o) / P(x1^x2^x3...^xn)
+
+IMPORTANT NOTE: IF WE CONSIDER THAT ALL THE INPUTS ARE MUTUALLY EXCLUSIVE THEN WE GET THE NAIVE BAYES FORMULA CONSIDERING
+P(a^b) = P(a)P(b|a) = P(a)P(b)   because P(b|a) = P(b)
+then
+	 ->
+P(o| i) = P(x1|o)*P(x2|o)*P(x3|o)...*P(xn|o) P(o) / P(x1)P(x2)P(x3)...P(xn)
+
+----------------------------------------------------
+Example:https://www.youtube.com/watch?v=CPqOCI0ahss
+outlook,temperature,humidity,wind,play
+-------------------------------------
+sunny,hot,high,false,no
+sunny,hot,high,true,no
+overcast,hot,high,false,yes
+rainy,mild,high,false,yes
+rainy,cool,normal,false,yes
+rainy,cool,normal,true,no
+overcast,cool,normal,true,yes
+sunny,mild,high,false,no
+sunny,cool,normal,false,yes
+rainy,mild,normal,false,yes
+sunny,mild,normal,true,yes
+overcast,mild,high,true,yes
+overcast,hot,normal,false,yes
+rainy,mild,high,true,no
+
+yes = 9
+no = 5
+P(yes) = 9/14
+P(no) = 5/14
+
+outlook		P(yes)	P(no)		temperature	P(yes)	P(no)		humidity	P(yes)	P(no)		wind	P(yes)	P(no)
+sunny		2/9		3/5			hot			2/9		2/5			high		3/9		4/5			false	6/9		2/5
+overcast	4/9		0/5			mild		4/9		2/5			normal		6/9		1/5			true	3/9		3/5
+rainy		3/9		2/5			cool		3/9		1/5
+
+P(sunny|yes)P(cool|yes)P(high|yes)P(true|yes)P(yes) = 2/9 * 3/9 * 3/9 * 3/9 * 9/14 = 486/91854 = 0.0053
+P(sunny|no)P(cool|no)P(high|no)P(true|no)P(no)		= 3/5 * 1/5 * 4/5 * 3/5 * 5/14 = 180/8750  = 0.0206 
+ 
+P(sunny)P(cool)P(high)P(true) = 5/14 * 4/14 * 7/14 * 6/14 = 840/38416 = 0.02186
+
+P(A|B) = P(A)P(B|A)/P(B) = P(AB)/P(B)
+P(yes|(sunny)(cool)(high)(true)) = P((sunny)(cool)(high)(true)|yes)*P(yes) / P(sunny)P(cool)P(high)P(true)
+								 = P(sunny|yes)P(cool|yes)P(high|yes)P(true|yes)P(yes) / P(sunny)P(cool)P(high)P(true) = 486/91854 // 840/38416
+								 = 0.2419
+P(no|(sunny)(cool)(high)(true))	 = P(sunny|no)P(cool|no)P(high|no)P(true|no)P(no) / P(sunny)P(cool)P(high)P(true) = 180/8750 // 840/38416							 
+								 = 0.9408
+
+It is not probable to play with : (sunny)(cool)(high humidity)(wind)
+
+Then we need to check how confidence is this database/answer for this we use the "Conditional Theorem or Bayes Theorem"
+We need to evaluate how confidence is the database. For this we take 20% (3 vectors in this case) and evaluate the Naive Bayes
+and check if the result match. We will get a percentage of matches, then we need to do the same to all possible combinations of 
+20% (3 vectors) and get a mean value of the results.
+
+
+Notes:
+1) Since we are working with probabilities there is the possibility that multiplying them generates a 0. This is solved with Laplace estimation.
+

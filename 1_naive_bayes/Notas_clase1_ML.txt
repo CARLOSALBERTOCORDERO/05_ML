@@ -1,0 +1,21 @@
+Ivica Kalichanin Balich
+3319013319
+ivica@iteso.mx
+
+Librerias de python
+---------------------
+Numpy
+Matplotlib
+Pandas
+requests
+pipeny
+
+IDE:
+anaconda[jupiter, Spyder]
+
+
+Probabilidad(Probabilidad de que un evento suceda debido a que ya sucedio otro)
+----------------
+P(B|A) = P(AB) / P(A)     P(B|A) * P(A) = P(AB)
+
+

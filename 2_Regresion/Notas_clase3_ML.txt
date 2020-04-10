@@ -1,0 +1,142 @@
+Algebra lineal
+---------------------
+producto interno y producto exterior
+
+
+producto interno 
+->  ->	 ->->
+a *  b = at*b = escalar
+
+Nota: si a y b son ortogonales a * b = 0
+
+->  ->
+a *  b = [a1 a2 a3]	b1 = a1b1 + a2b2 + a3b3
+					b2
+					b3
+
+producto exterior
+->  ->	 ->->
+a *  b = a*bt = Matriz
+
+->->
+a*bt =  a1[b1 b2 b3]	= 	a1b1 a1b2 a1b3
+		a2					a2b1 a2b2 a2b3
+		a3					a3b1 a3b2 a3b3
+		
+Proyecciones
+---------------	
+b /|
+ / |e
+/  |
+------>a
+--->
+p
+
+R2
+-------
+p = k*a		p = b + e	e = p - b	a*e = 0
+a*(p-b) = 0		a*(k*a-b) = 0
+k*a*a - a*b = 0		k*a*a = a*b		k = atb/ata
+
+p = atb/ata * a		p = a*atb/ata	p = (1/ata)(a*at)*b	
+
+Nota: (1/ata)es una constante
+	  (a*at) es una matriz
+	   b es un vetor
+
+	p = P*b   donde  P = (1/ata)(a*at)
+	
+	
+R3
+-------
+
+ b /|
+  / |
+ /  |e
+/---|--->a2
+\p\ |
+ \  .
+a1\
+   \
+
+
+p = k1a1 + k2a2		p = b + e	a1 * e = 0		a2 * e = 0
+e = p - b	A = [a1 a2]		At = a1t	At * e = 0		k = k1		p = A * k  // No se traspone A a la hora de multiplicar porque  
+								 a2t 		 	 0			k2					  aunque se trata como vector es una Matriz
+								  		
+At * (p-b) = 0		At*p = At*b		At*(A * k) = At*b		(At*A)* k = At*b   		k = ((At*A)^-1)At*b
+			 0
+			 
+p = A*((At*A)^-1)At  *  b
+
+P = A*((At*A)^-1)At
+
+p = P * b
+
+
+------------------------------------------
+Relacion/Aproximacion lineal
+
+y
+|     /
+|    /.			y = b0 + b1x + e
+|  ./			e(epsilon: residuo o error) es al azahar
+|  /				
+| /  			y = ^y + e  donde ^y = b0 + b1x
+|/.
+|----------x
+
+Para encontrar el e minimo se usa el metodo del minimo cuadrado
+min de SSE(sample square of errors) = sum(ei^2)
+Esto porque: elimina los negativos y aparte los paraboloides siempre tienen un minimo.
+
+ei = yi - ^yi
+SSE = sum((yi - b0 - b1xi)^2)  desde i = 0 a i = n
+d(SSE) / db0 = 0	d(SSE) / db1 = 0		//El minimo sera
+
+d(SSE) / db0 = sum(-2(yi - b0 - b1xi)) = 0
+			= sum(-yi + b0 - b1xi) = sum(-yi) + b0*sum(1) + b1*sum(xi) = -sum(yi) + b0n + b1*sum(xi) = 0
+								  _		_			 _	   _
+b0 = sum(yi)/n - b1*sum(xi) / n = y - b1x		b0 = y - b1x	// b1 es la pendiente y b0 el offset 
+																// por lo tanto el punto (x,y) es parte de la recta solucion
+
+																
+d(SSE) / db1 = sum(-2xi(yi - b0 - b1xi)) = 0			_	  _							   _	   _
+			= sum(-yixi + b0xi + b1xi^2) = sum(-yixi + (y - b1x)xi + b1xi^2) = sum(-yixi + yxi - b1xxi + b1xi^2) = 0
+			               _			_
+			 = sum(-yixi + yxi) - sum(b1xxi - b1xi^2) = 0
+	   _	 			 	_
+sum(xi(y - yi)) = b1*sum(xi(x - xi))
+			_				  _								  _					_
+b1 = sum(xi(y - yi)) / sum(xi(x - xi))		b1 =  sum(xi(yi - y)) / sum(xi(xi - x))
+			  _		  _	  			_		_
+b1 =  sum((xi-x)(yi - y)) / sum((xi-x)(xi - x)) = SSxy / SSxx
+
+^y = b0 + b1x
+
+-------------------------------------------------------------
+Regrecion lineal con matrices
+
+b0 +b1x = y1
+b0 +b1x = y2
+b0 +b1x = y3
+
+  ->  ->
+A b = y 
+
+[1	x1|y1]
+[1	x2|y2]
+[1	x3|y3]
+
+pero el resultado dara
+[1	0|b0]
+[0	1|b1]
+[0	0|n ]
+Por lo que no puede ser resuelto asi.
+
+    ->    ->
+AtA b = Aty 
+
+AtA es una matriz 2x2 por lo tanto ya se puede resolver y se obtinen b0 y b1.
+-------------------------------------------------------------
+

@@ -1,0 +1,207 @@
+UNA NEURONA
+----------------------
+            bias
+x1--w1--| /1
+        V/w0
+x2--w2->S ---->z
+        ^
+x3--w3--|
+
+S: state
+z: output
+w: Weigh 
+x: inputs
+
+s = w0 + w1x1 + w2x2 + w3x3  
+
+->
+x = [x1]
+    [x2]
+    [x3]
+    
+->
+w =[w1]
+    [w2]
+    [w3]
+
+->
+x' = [1]
+    [x1]
+    [x2]
+    [x3]
+    
+->
+w' =[w0]
+    [w1]
+    [w2]
+    [w3]
+    ->   ->
+s = w' * x'
+
+z Funcion de activacion o transferencia
+----------------------
+z = z(s)
+z tiene un valor de activacion que depende de s. La señal z cambia a partir de ese valor.
+z=s puede generar numeros muy grandes dificiles de computar por lo que casi no se usa.
+z por lo general solo tiene un valor discreto de valores (0,1), (-1,1)
+Nota: sum(wixi) esta centrado en 0 Bias nos sirve para desplazar el resultado.
+Pero tambien puede ser continuo. z = s, (0 para valores menores de 0 y s para los demas), (0,s,1), (-1,s,1)...
+Tambien se tienen funciones que ya naturalmente tienen salidas limitadas log sigmoid, hyperboic tangentsigmoid.
+
+Los valores discritos se usan para clasificacion y los continuos para regresion lineal.
+Las fusiones con salida limitada por lo general se usan para regresion logistica.
+
+
+Multiples neuronas
+----------------------
+Para esto se va a separar en layers[Checar imagen "Layers"]:
+* Input layer
+* Hidden layers
+* Ouput layer
+Note1: Para el orden de la red neuronal no se cuenta la Input layer porque no se procesa nada.
+Si se tienen tres capas entonces sera una red neurona de 2 capas.
+Nota2: si la nerona no tiene retroalimentacio se le llama Feed-Foward
+Note3: Every single layer has different information.
+Note4: all the outputs of one layer have to be the input of the next layer.
+
+wab : a es la neurona b es la entrada
+
+->
+w1= [w10]
+    [w11]
+    [w12]
+    [w13]
+    [w14]
+        
+W = [w1 w2 w3 w4]
+
+->     ->
+s = Wt*x'
+
+->  -> ->
+z = z( s )
+
+zab: Salida de capa a neurona b
+Entonces
+
+->       ->     ->   -> ->
+s1 = V1t*x1     z1 = z1(s1)
+->
+x2= [1]         // Se le agrega el bias a cada layer
+     ->
+    [z1]
+->      ->      ->   -> ->
+s2 = v2tx2      z2 = z2(s2)
+
+Estas operaciones se haran si ya esta entrenada la red.
+El objetivo es entrenar para encontrar todos los pesos(w). 
+Hay muchos algoritmos de aprendisaje.
+
+
+
+PERCEPTRON
+----------------
+Neurona con dos entradas y una salida.
+
+            bias
+x1--w1--| /1
+        V/w0
+x2--w2->S ---->z
+
+x1 y x2 son las cordenadas para un plano.
+Si dibujamos una linea en ese plano, y conocemos un punto en esa recta 
+y un vector perpendicular a esa linea, podemos contruir la funcion de la recta.
+    x2
+    ^
+    |        ->
+    \        >w(perpendicular a f(x1))    
+    |\f(x1)  /
+    | \    /
+p2  |  \p /
+    |  /\/
+    | /  \
+    |/    \
+    -------\--------------------->x1
+        p1
+
+-> 
+p = p - (0,0) = [p1] //esta centrado en el origen
+                [p2]
+->
+w = [w1] // perpendicular a f(x1)
+    [w2]
+                          ->
+Tambien tenemos un vector r centrado en el origen que esta tambien sobre la recta f(x1).
+->
+r = [x1]
+    [x2]
+->               ->  ->
+u : vector entre p y r y va sobre la recta f(x1)
+->  ->  ->  ->  ->  ->
+p + u = r   u = r - p
+                        
+->  ->
+w * u = 0  // son ortogonales
+->   ->  ->          ->  ->    ->  ->
+w * (r - p) = 0     (w * r) - (w * p) = 0   w1x1 + w2x2 + w0 = 0  // donde w0 = -w1p1 - w2p2 es una constante
+w0 + w1x1 + w2x2 = 0  es f(x1)
+
+s = {w0 + w1x1 + w2x2 = 0}
+
+    x2
+    ^
+    |        ->
+    \        >w(perpendicular a s)    
+    |\s     /   +
+    | \  + /
+    |  \  /    +
+    |   \/
+ -  |  - \
+    |     \  -
+    -------\--------------------->x1
+                 ->
+Linia S y vector w son ortogonales
+-----------------------------------
+ejemplo: x2 = 2x1 es una linea con pendiente 2.
+          ->
+el vector w se saca con 0 = x2 -2x1
+->
+w = [-2]
+    [1]
+Tal vector es perpendicular a la recta x2 = 2x1.
+    
+s entonces sera la ecuacion de la recta, pero el verdadero problema que queremos resolver es clasificar puntos en el plano
+en este caso queremos que todas las - queden de un lado de la recta y todas las + del otro.
+Modifiando w se modificara la linea, w1 y w2 modificaran la inclinacion y w0 el origen.
+Con ciclos de aprendisaje se van ajustando las w.
+
+El algoritmo de aprendisaje sera el siguiente:
+1) cargar w con valores al random.
+2) se evalua punto y se ve si esta en la zona que le corresponde
+z = { 1 s > 0 }
+    { -1 s <= 0 }
+z - d debe ser = 0   
+d es el valor deseado.
+
+3) Ajustamos w dependiendo el resultado de 2)
+w1(t) = w1(t-1) + ap1*d
+w2(t) = w2(t-1) + ap2*d
+w0(t) = w0(t-1) + a(1)*d
+
+La logica es la siguiente, w es un vector perpendicular a la recta si nosotors a w1 y w2 les sumamos p1 y p2 basicamente estamos 
+girando la recta en direccion del punto.
+a se usa porque al sumar w1 y w1 les sumamos p1 y p2 puede girarse demasiado siempre y nunca llegar a resultado, por lo que
+es una fraccion y se le llama factor de aprendisaje.
+
+Una epoca es ejecutar 1) hasta 3) para todos los puntos
+
+4) Se ejecutan epocas hasta que todos los puntos esten donde corresponde y nos quedaremos con los valores de w.
+
+Nota: El perceptron no puede separar grupos que estan mesclados.
+
+La verdadera respuesta es llevar el vectro de pesos(w) de direccion de una clasificacion.
+La linea siempre es ortogonal a w por lo que dirigir w dl centro de una clasificacion a la otra creara automaticamente la linea entre ellas.
+Por eso cuando hay un error se suma/resta el valor mismo del punto evaluado y se le da la direccion que era deseada.
+
+En resumen:
+El metodo hace que w apunte del centro de una clasificacion a otra y asi solo se hace la linea divisoria porque es perpendicular a w.

@@ -1,0 +1,38 @@
+1)
+m x n
+en airfoil_serlf_noise
+
+la ultima es la salida los demas son entradas.
+Cambiar a :
+if r < 0.2:
+y quiza quitar:
+rnd.seed(17)
+
+my_file = open("airfoil_ikb_<iniciales de nombre>.csv", 'w')
+
+Nota: los datos estan separados por espacio
+
+
+2)
+
+70% de datos en train.csv
+30% en test.csv
+
+3)
+Se aplica regresion sobre train  y se prueba sobre test.
+
+suponer:
+^z = b0 + bixi
+
+[1 x11 x12... x15]
+[1 x21 x22... x25]
+[1 x31 x32... x35]
+...
+[1 x2701 x2702... x2705]
+
+Nota: investigar librerias para sacar transpuestas y producto de
+2 matries, Gauss reduction.
+
+4)
+Leer test.csv y evaluar y sacar RMSE.
+

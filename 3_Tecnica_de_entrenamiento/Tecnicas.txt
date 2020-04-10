@@ -1,0 +1,48 @@
+Tecnicas para ver que tan bien se entreno el modelo Cross Validation
+-----------------------------------------------------
+
+1) Hold-out
+
+Lo que entrega el cliente se divide en 70% y 30%
+Entrenamiento: 70%
+test: 30%
+
+Pro:
+No mucho computo.
+Cons:
+Se pierde informacion.
+
+------------------------------
+
+2) k-fold
+k = normalmente 10
+
+Se divide inpun en k grupos
+
+1 grupo es para test el resto para train.
+luego se toma el siguiente grupo para test y el resto para train.
+Se repite hasta que todos los grupos fueron usados para test.
+
+------------------------------
+3)
+Leave-one-out
+
+1 solo dato para test el resto para train 
+luego se toma el siguiente dato para test y el resto para train
+Se repite hasta que todos los datos fueron usados para test.
+
+-----------------------------------------------------
+
+Como se evalua el entrenamiento
+--------------
+
+Si es clasificacion, despues de hacer test  acertados / total de test
+
+Si es regresion:  
+MAD(Mean Absolute Error) = error = sum(|^z - z|) / total_de_test 	
+RMSE(Root Mean Square Error) = square(sum((^z - z)^2) / total_de_test)
+donde 	^z es la prediccion y z pues es el valor supervisado
+
+
+-----------------------------------------------------
+
